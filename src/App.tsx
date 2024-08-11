@@ -1,3 +1,26 @@
+interface Skill {
+  skill: string;
+  level: "beginner" | "intermediate" | "advanced";
+}
+
+const colors = ["salmon", "aquamarine", "orange", "yellow", "green", "cyan"];
+
+const skills: Skill[] = [
+  { skill: "HTML", level: "intermediate" },
+  { skill: "CSS", level: "intermediate" },
+  { skill: "Javascript", level: "advanced" },
+  { skill: "Typescript", level: "advanced" },
+  { skill: "Java", level: "advanced" },
+  { skill: "Angular", level: "advanced" },
+  { skill: "React", level: "intermediate" },
+  { skill: "Spring Boot", level: "intermediate" },
+  { skill: "Node.js", level: "beginner" },
+  { skill: "PostgreSQL", level: "intermediate" },
+  { skill: "MongoDb", level: "beginner" },
+  { skill: "Git", level: "advanced" },
+  { skill: "Docker", level: "intermediate" },
+];
+
 function App() {
   return (
     <div className="card">
@@ -9,56 +32,49 @@ function App() {
           website="https://www.linkedin.com/in/kosei-yokoyama-776b20123/"
           websiteDescription="LinkedIn"
         />
-        <SkillList
-          skills={[
-            "HTML",
-            "CSS",
-            "Javascript",
-            "Typescript",
-            "Angular",
-            "React",
-            "Spring Boot",
-            "Node.js",
-            "PostgreSQL",
-            "MongoDb",
-            "Git",
-            "Docker",
-          ]}
-        />
+        <SkillList skills={skills} />
       </div>
     </div>
   );
 }
 
-function Avatar(props: { image: string }) {
-  return <img className="avatar" src={props.image} />;
+interface AvatarProps {
+  image: string;
 }
 
-function Intro(props: {
+function Avatar({ image }: AvatarProps) {
+  return <img className="avatar" src={image} />;
+}
+
+interface IntroProps {
   name: string;
   description: string;
   website?: string;
   websiteDescription?: string;
-}) {
+}
+
+function Intro({ name, description, website, websiteDescription }: IntroProps) {
   return (
     <>
-      <h1>{props.name}</h1>
-      <span>{props.description}</span>
-      {props.website && props.websiteDescription && (
+      <h1>{name}</h1>
+      <span>{description}</span>
+      {website && websiteDescription && (
         <div style={{ marginTop: "12px" }}>
-          <a href={props.website}>{props.websiteDescription}</a>
+          <a href={website}>{websiteDescription}</a>
         </div>
       )}
     </>
   );
 }
 
-function SkillList(props: { skills: string[] }) {
-  const colors = ["salmon", "aquamarine", "orange", "yellow", "green", "cyan"];
+interface SkillListProps {
+  skills: Skill[];
+}
 
+function SkillList({ skills }: SkillListProps) {
   return (
     <div className="skill-list">
-      {props.skills.map((skill, index) => (
+      {skills.map((skill, index) => (
         <Skill
           key={index}
           skill={skill}
@@ -69,10 +85,28 @@ function SkillList(props: { skills: string[] }) {
   );
 }
 
-function Skill(props: { skill: string; color: string }) {
+interface SkillProps {
+  skill: Skill;
+  color: string;
+}
+
+function getIconForLevel(level: string): string {
+  switch (level) {
+    case "beginner":
+      return "👶";
+    case "intermediate":
+      return "👍";
+    case "advanced":
+      return "💪";
+    default:
+      return "❔";
+  }
+}
+
+function Skill({ skill, color }: SkillProps) {
   return (
-    <span className="skill" style={{ backgroundColor: props.color }}>
-      {props.skill}
+    <span className="skill" style={{ backgroundColor: color }}>
+      {skill.skill} {getIconForLevel(skill.level)}
     </span>
   );
 }
